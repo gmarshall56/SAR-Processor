@@ -119,12 +119,12 @@ function SarTablePage() {
             <>
                 <div >
 
-                    {column.text}&nbsp;<Image src="/sort-alpha-down.svg" style={{ cursor: 'pointer' }} />
+                    {column.text}&nbsp;<Image src="/sort-alpha-down.svg"  alt='down arrow' style={{ cursor: 'pointer' }} />
 
 
                     <div style={{ float: 'right', display: 'inline-block', cursor: 'pointer' }}>
                         <Image
-                            src="/search.svg" height="16px" width="16px" onClick={handleClickHourglass} />
+                            src="/search.svg" height="16px" width="16px"   alt='search'  onClick={handleClickHourglass} />
                     </div>
                 </div>
 
@@ -135,9 +135,9 @@ function SarTablePage() {
         return (
             <>
                 <div>
-                    {column.text}&nbsp;<Image src="/ui-maps/sort-alpha-down.svg" style={{ cursor: 'pointer' }} />
+                    {column.text}&nbsp;<Image src="/ui-maps/sort-alpha-down.svg"   alt='search'  style={{ cursor: 'pointer' }} />
                     <div style={{ float: 'right', display: 'inline-block', cursor: 'pointer' }}>
-                        <Image src="/ui-maps/search.svg" height="16px" width="16px" onClick={handleClickHourglass} />
+                        <Image src="/ui-maps/search.svg" height="16px" width="16px"   alt='search' onClick={handleClickHourglass} />
                     </div>
                 </div>
 

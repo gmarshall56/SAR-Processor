@@ -17,10 +17,12 @@ import styles from '../../styles/Home.module.css'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import classes from'./upload.module.css';
+// import classes from'./upload.module.css';
+
+import classes from '../upload/upload.module.css';
 
 
-const selectafile = () => {
+const Selectafile = () => {
   const router = useRouter();
 
   const [selectedFile, setSelectedFile] = useState(null);
@@ -304,7 +306,7 @@ const selectafile = () => {
               <Form.Label className={classes.selectFileMsg}>Select a file:</Form.Label>
               <Form.Control type="file" size="lg" onChange={handleFileInput}/>
               <br/>
-              <div class="text-center">
+              <div className={styles.messages}>
                 <Button onClick={() => uploadFile3(selectedFile)} bsStyle="primary">Upload to S3</Button>
                 <br/>
                 <br/>
@@ -319,10 +321,12 @@ const selectafile = () => {
           //     <span className="alert-icon"><i class="ni ni-like-2"></i></span>
           //     <span className="alert-text"><strong>Error!</strong>{errmsg}</span>
           // </Alert>
-          <Alert color="danger">
-            <h4 className="alert-heading" className={styles.messages}>ERROR!</h4>
-            <p className={styles.messages}>{errmsg}</p>
-          </Alert>
+          <>
+            <Alert color="danger">
+              <h4 className="My-Alert-heading">ERROR!</h4>
+              <p className={styles.messages}>{errmsg}</p>
+            </Alert>
+          </>
         }
         
         {resultsTableData.length > 0 &&
@@ -348,4 +352,4 @@ const selectafile = () => {
 
 }
 
-export default selectafile;
+export default Selectafile;

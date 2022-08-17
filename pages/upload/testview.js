@@ -1,3 +1,3 @@
-export default function testview () {
+export default function Testview () {
   return <p>TESTVIEW</p>;
 }

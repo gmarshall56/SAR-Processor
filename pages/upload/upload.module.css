@@ -5,7 +5,8 @@
   text-align: center;
 }
 
-.alert-heading {
+.My-Alert-heading {
   color: inherit;
-  text-align: center;
+  display: flex;
+  justify-content: center;
 }

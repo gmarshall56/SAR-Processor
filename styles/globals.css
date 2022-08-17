@@ -14,3 +14,9 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.My-Alert-heading {
+  color: inherit;
+  display: flex;
+  justify-content: center;
+}

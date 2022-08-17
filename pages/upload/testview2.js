@@ -1,6 +1,5 @@
-import testview from "./testview";
 
-const testview2 = (props) => {
+const Testview2 = (props) => {
 
   return (
     <>
@@ -14,4 +13,4 @@ const testview2 = (props) => {
   )
 }
 
-export default testview2;
+export default Testview2;
