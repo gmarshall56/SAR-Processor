@@ -1,0 +1,15 @@
+import { S3Client } from "@aws-sdk/client-s3";
+
+// Set the AWS Region.
+const REGION = process.env.NEXT_PUBLIC_REGION
+
+// Create an Amazon S3 service client object:
+const s3Client = new S3Client({ 
+  region: REGION,
+  credentials: {
+     accessKeyId: process.env.NEXT_PUBLIC_ACCESS_KEY,
+     secretAccessKey: process.env.NEXT_PUBLIC_SECRET_KEY,
+   }
+ });
+
+export { s3Client };
