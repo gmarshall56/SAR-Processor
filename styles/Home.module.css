@@ -1,9 +1,14 @@
 
 
-\
+
 Y.container {
   padding: 0 2rem;
 }
+
+.container {
+  padding: 0 2rem;
+}
+
 
 .main {
   min-height: 100vh;
@@ -131,4 +136,17 @@ Y.container {
     width: 100%;
     flex-direction: column;
   }
+}
+
+.selectFileMsg {
+  font-weight: 700;
+}
+.text-center {
+  text-align: center;
+}
+
+.My-Alert-heading {
+  color: inherit;
+  display: flex;
+  justify-content: center;
 }

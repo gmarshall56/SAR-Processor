@@ -289,8 +289,8 @@ const Selectafile = () => {
             <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <main className={styles.selectafileMain}>
-            <h1 className={styles.title}>File Uploader </h1>
+        <div className={styles.selectafileMain}>
+            <h1 className={styles.title}>Selectafile:: File Uploader </h1>
             <br></br>
             <br></br>
             {loading > 0 &&
@@ -314,7 +314,7 @@ const Selectafile = () => {
               </div>
             </Form.Group>
 
-        </main>
+        </div>
 
         {errmsg &&
           // <Alert color="danger">

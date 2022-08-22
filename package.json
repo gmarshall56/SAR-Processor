@@ -20,7 +20,7 @@
     "pg": "^8.7.3",
     "primeicons": "^5.0.0",
     "primereact": "^8.1.1",
-    "react": "18.2.0",
+		"react": "18.2.0",
     "react-aws-s3": "^1.5.0",
     "react-bootstrap": "^2.4.0",
     "react-bootstrap-table-next": "^4.0.3",

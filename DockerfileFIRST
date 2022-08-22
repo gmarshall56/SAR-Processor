@@ -1,0 +1,65 @@
+# From: https://www.oddicles.net/blog/next-js-dockerfile-using-npm-instead-of-yarn/
+# Install dependencies only when needed
+FROM node:16-alpine AS deps
+
+WORKDIR /sarApp
+
+COPY package.json package-lock.json ./
+
+# building the app
+RUN npm cache clean --force
+RUN npm config set legacy-peer-deps true
+# --- MINE ---RUN npm install --legacy-peer-deps
+RUN npm ci
+
+
+#======================================
+# Rebuild the source code only when needed
+FROM node:16-alpine AS builder
+WORKDIR /sarApp
+COPY . .
+COPY --from=deps /sarApp/node_modules ./node_modules
+RUN npm cache clean --force
+RUN npm config set legacy-peer-deps true
+RUN npm run build && npm ci --production --ignore-scripts --prefer-offline
+# -- mine... RUN npm run build 
+# -- mine... RUN npm install --legacy-peer-deps --production --ignore-scripts --prefer-offline
+
+#=======================================
+# Production image, copy all the files and run next
+FROM node:16-alpine AS runner
+WORKDIR /sarApp
+
+ENV NODE_ENV production
+# Do not send general usage data
+ENV NEXT_PUBLIC_ACCESS_KEY='AKIAVDJYUKXUJS6GNS64'
+ENV NEXT_PUBLIC_BUCKET_s3URL='https://sar-import-bucket.s3.amazonaws.com/'
+ENV NEXT_PUBLIC_PGSQL_DATABASE='sar_db'
+ENV NEXT_PUBLIC_PGSQL_HOST='marshallworkingdb.ck2anfylphwn.us-east-1.rds.amazonaws.com'
+ENV NEXT_PUBLIC_PGSQL_PASSWORD='cstmfvtadmin'
+ENV NEXT_PUBLIC_PGSQL_PORT='5432'
+ENV NEXT_PUBLIC_PGSQL_USER='postgres'
+ENV NEXT_PUBLIC_PROCESS_URL='https://cbdm2ajlrc.execute-api.us-east-1.amazonaws.com/stupid/sarbyproxy?'
+ENV NEXT_PUBLIC_REGION='us-east-1'
+
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+
+# You only need to copy next.config.js if you are NOT using the default configuration
+# COPY --from=builder /sarApp/next.config.js ./
+COPY --from=builder /sarApp/public ./public
+COPY --from=builder --chown=nextjs:nodejs /sarApp/.next ./.next
+COPY --from=builder /sarApp/node_modules ./node_modules
+COPY --from=builder /sarApp/package.json ./package.json
+COPY --from=builder /sarApp/next.config.js ./next.config.js
+
+USER nextjs
+
+EXPOSE 8080
+
+# Next.js collects completely anonymous telemetry data about general usage.
+# Learn more here: https://nextjs.org/telemetry
+# Uncomment the following line in case you want to disable telemetry.
+ENV NEXT_TELEMETRY_DISABLED 1
+
+CMD ["npm", "start"]
