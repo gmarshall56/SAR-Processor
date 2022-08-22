@@ -49,11 +49,12 @@ const Home = () => {
     axios.post("/api/processUploadFile/?filename=" + file, config)
         .then(response => {
 
-          console.log('selectafile/callLambda:: processUploadFile returned...');
+          console.log('Upload Home/callLambda:: processUploadFile returned...');
 
 
           // check response:
           if (response.data.code != "200"){
+            console.log('Upload Home/callLambda:: Error occurred in processUploadFile =>' + response.data.message);
             setErrMsg(response.data.message);
           }
           else{
@@ -67,11 +68,11 @@ const Home = () => {
         })
         .catch(err => {
 
-            console.log('selectafile/callLambda:: processUploadFile call failed:', err);
+            console.log('Upload Home/callLambda:: processUploadFile call failed:', err);
 
         })
 
-    console.log('selectafile/callLambda:: end of this function...');
+    console.log('Upload Home/callLambda:: end of this function...');
   }
 
 
@@ -108,16 +109,16 @@ const Home = () => {
           const ReactS3Client = new S3(params);
 
 
-          console.log('selectafile/uploadFile3:: about to upload file to S3 using ReactS3Client....');
+          console.log('Upload Home/uploadFile3:: about to upload file to S3 using ReactS3Client....');
 
 
           ReactS3Client
             .uploadFile(file, file.name)
             .then(data => 
                   
-                    console.log("selectafile/uploadFile3:: returned data: ", data.location),
+                    console.log("Upload Home/uploadFile3:: returned data: ", data.location),
               
-                    console.log('selectafile/uploadFile3:: File uploaded to the S3 bucket; about to call SarProcessor lambda...'),
+                    console.log('Upload Home/uploadFile3:: File uploaded to the S3 bucket; about to call SarProcessor lambda...'),
 
                     // successful upload of file, run the lambda function to process it and get
                     // the results of that process:
@@ -125,7 +126,7 @@ const Home = () => {
                     axios.post("/api/processUploadFile/?filename=" + file.name, config)
                     .then(response => {
           
-                      console.log('selectafile/uploadFile3:: calling processUploadFile returned...');
+                      console.log('Upload Home/uploadFile3:: calling processUploadFile returned...');
 
                       // check response:
                       if (response.data.code != "200"){
@@ -140,13 +141,13 @@ const Home = () => {
                     })
                     .catch(err => {
           
-                        console.log('selectafile:: processUploadFile call failed:', err);
+                        console.log('Upload Home:: processUploadFile call failed:', err);
           
                     }),
   
 
                   )
-            .catch(err => console.error("selectafile:: processUploadFile returned data:", err)) 
+            .catch(err => console.error("Upload Home:: processUploadFile returned data:", err)) 
 
 
         } catch (err) {
@@ -182,7 +183,7 @@ const Home = () => {
         // Create an object and upload it to the Amazon S3 bucket.
         try {
 
-          console.log('selectafile / uploadFile2:: about to upload file to S3');
+          console.log('Upload Home / uploadFile2:: about to upload file to S3');
 
           //results = await axios.post("/api/upload2/?filename=" + file.name, selectedFile, config)
 
@@ -192,7 +193,7 @@ const Home = () => {
               + params.Bucket + "/" + params.Key);
 
 
-          // console.log('selectafile:: about to call SarProcessor lambda...');
+          // console.log('Upload Home:: about to call SarProcessor lambda...');
 
           // // successful upload of file, run the lambda function to process it and get
           // // the results of that process:
@@ -200,12 +201,12 @@ const Home = () => {
           // axios.post("/api/processUploadFile/?filename=" + file.name, config)
           // .then(response => {
 
-          //   console.log('selectafile:: processUploadFile returned data:', response.data);
+          //   console.log('Upload Home:: processUploadFile returned data:', response.data);
 
           // })
           // .catch(err => {
 
-          //     console.log('selectafile:: processUploadFile call failed:', err);
+          //     console.log('Upload Home:: processUploadFile call failed:', err);
 
           // })
 
@@ -254,14 +255,14 @@ const Home = () => {
 
         } catch (err) {
             // Handle Error Here
-            console.log('selectafile:: failed to retrieve data from api/validate:', err);
+            console.log('Upload Home:: failed to retrieve data from api/validate:', err);
             alert("Error occurred uploading file: " + err)
         }
 
         if (res !== undefined) {
           if (res.data) {
             let returncode = res.data.results.$metadata.httpStatusCode;
-            console.log("selectafile:: RETURN FROM /api call; results: " + returncode);
+            console.log("Upload Home:: RETURN FROM /api call; results: " + returncode);
             if (returncode == 200){
               alert("File uploaded successfully ")
             }
@@ -280,13 +281,13 @@ const Home = () => {
 
     <div className={classes.container}>
         <Head>
-            <title>Upload A File</title>
+            <title>SAR Upload</title>
             <meta name="description" content="Generated by create next app" />
             <link rel="icon" href="/favicon.ico" />
         </Head>
 
         <div className={classes.selectafileMain}>
-            <h1 className={classes.title}>Home page:: File Uploader </h1>
+            <h1 className={classes.title}>SAR Upload </h1>
             <br></br>
             <br></br>
             {loading > 0 &&
