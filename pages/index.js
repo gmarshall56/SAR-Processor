@@ -52,7 +52,7 @@ const Home = () => {
                 "api/processUploadFile/?filename=" + file);
 
 
-    axios.post(theDomain + "/api/processUploadFile/?filename=" + file, config)
+    axios.post(theDomain + "api/processUploadFile/?filename=" + file, config)
         .then(response => {
 
           console.log('Upload Home/callLambda:: processUploadFile returned...');
