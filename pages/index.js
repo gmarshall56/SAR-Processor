@@ -46,7 +46,13 @@ const Home = () => {
       },
     };
 
-    axios.post("/api/processUploadFile/?filename=" + file, config)
+    const theDomain = window.location.href;
+    console.log("theDomain = "+ theDomain);
+    console.log("Upload Home/callLambda:: about to call processUploadFile with this URL: " + theDomain +
+                "api/processUploadFile/?filename=" + file);
+
+
+    axios.post(theDomain + "/api/processUploadFile/?filename=" + file, config)
         .then(response => {
 
           console.log('Upload Home/callLambda:: processUploadFile returned...');
@@ -123,6 +129,7 @@ const Home = () => {
                     // successful upload of file, run the lambda function to process it and get
                     // the results of that process:
 
+
                     axios.post("/api/processUploadFile/?filename=" + file.name, config)
                     .then(response => {
           
@@ -130,6 +137,7 @@ const Home = () => {
 
                       // check response:
                       if (response.data.code != "200"){
+                        console.log('Upload Home/callLambda:: Error occurred in processUploadFile =>' + response.data.message);
                         setErrMsg(response.data.message);
                       }
                       else{
@@ -147,12 +155,12 @@ const Home = () => {
   
 
                   )
-            .catch(err => console.error("Upload Home:: processUploadFile returned data:", err)) 
+            .catch(err => console.error("Upload Home:: ReactS3Client returned error: ", err)) 
 
 
         } catch (err) {
 
-          console.log("Error", err);
+          console.log("Upload Home:: Error in try/catch: ", err);
         }
       };
 
