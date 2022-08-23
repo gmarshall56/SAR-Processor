@@ -1,0 +1,21 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-xlsupload-dev-145558-authRole",
+      "UnauthRoleArn": "arn:aws:iam::350695478760:role/amplify-xlsupload-dev-145558-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::350695478760:role/amplify-xlsupload-dev-145558-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-xlsupload-dev-145558-deployment",
+      "UnauthRoleName": "amplify-xlsupload-dev-145558-unauthRole",
+      "StackName": "amplify-xlsupload-dev-145558",
+      "StackId": "arn:aws:cloudformation:us-east-1:350695478760:stack/amplify-xlsupload-dev-145558/0f170860-224c-11ed-af5c-0abea1c9319f",
+      "AmplifyAppId": "d2miv0ha61l194"
+    },
+    "categories": {
+      "auth": {
+        "xlsupload0d720013": {},
+        "true": {}
+      }
+    }
+  }
+}

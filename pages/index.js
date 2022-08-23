@@ -1,4 +1,6 @@
 import React ,{useState} from 'react';
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import { Storage } from 'aws-amplify';
 import { useRouter } from "next/router";
 import { Button, Form, Col, Row } from "react-bootstrap";
 import { s3Client } from "../lib/S3Client"
@@ -12,6 +14,8 @@ import Head from 'next/head'
 import ResultsTable from '../views/results/ResultsTable';
 
 import axios from "axios";
+
+import '@aws-amplify/ui-react/styles.css';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -112,12 +116,19 @@ const Home = () => {
         // Create an object and upload it to the Amazon S3 bucket.
         try {
 
-          const ReactS3Client = new S3(params);
-
-
           console.log('Upload Home/uploadFile3:: about to upload file to S3 using ReactS3Client....');
 
+          //AWS Amplify Storage: (This puts the files in a bucket called sar-import-bucket145558-dev,
+          //                in a "public/" folder...nope
 
+          // const result = await Storage.put(selectedFile.name, selectedFile, {
+          //   contentType: selectedFile.type,
+          // });
+          // console.log("AWS Amplify uploaded file ok? ", result);
+          // setLoading(false);
+
+
+          const ReactS3Client = new S3(params);
           ReactS3Client
             .uploadFile(file, file.name)
             .then(data => 
@@ -357,4 +368,4 @@ const Home = () => {
 
 }
 
-export default Home;
+export default withAuthenticator(Home);
