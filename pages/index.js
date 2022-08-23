@@ -1,5 +1,6 @@
 import React ,{useState} from 'react';
 import { withAuthenticator } from '@aws-amplify/ui-react';
+import awsExports from '../src/aws-exports';
 import { Storage } from 'aws-amplify';
 import { useRouter } from "next/router";
 import { Button, Form, Col, Row } from "react-bootstrap";
@@ -7,7 +8,7 @@ import { s3Client } from "../lib/S3Client"
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { ActivityIndicator } from "react-native-web";
 import { Alert } from "reactstrap";
-import S3 from 'react-aws-s3';
+// import S3 from 'react-aws-s3';
 
 import Head from 'next/head'
 
@@ -88,7 +89,9 @@ const Home = () => {
 
   const uploadFile3 = (file) => {
 
-    // Uses ReactS3Client.  See: https://github.com/Developer-Amit/react-aws-s3
+
+    let awsex = {...awsExports};
+    console.log('pp awsExports: ', awsex);
 
     setLoading(true);
 
@@ -116,17 +119,46 @@ const Home = () => {
         // Create an object and upload it to the Amazon S3 bucket.
         try {
 
-          console.log('Upload Home/uploadFile3:: about to upload file to S3 using ReactS3Client....');
-
           //AWS Amplify Storage: (This puts the files in a bucket called sar-import-bucket145558-dev,
           //                in a "public/" folder...nope
+
+          console.log('Upload Home/uploadFile3:: about to upload file to S3 using AWS Amplify Storage...');
 
           const result = await Storage.put(selectedFile.name, selectedFile, {
             contentType: selectedFile.type,
           });
-          console.log("AWS Amplify uploaded file ok? ", result);
+          
+          console.log("Upload Home/uploadFile3:: AWS Amplify uploaded file ok? ", result);
+          console.log('Upload Home/uploadFile3:: File uploaded to the S3 bucket; about to call SarProcessor lambda...'),
+
+          axios.post("/api/processUploadFile/?filename=" + file.name, config)
+                    .then(response => {
+          
+                      console.log('Upload Home/uploadFile3:: calling processUploadFile returned...');
+
+                      // check response:
+                      if (response.data.code != "200"){
+                        console.log('Upload Home/callLambda:: Error occurred in processUploadFile =>' + response.data.message);
+                        setErrMsg(response.data.message);
+                      }
+                      else{
+                        setResultsTableData(response.data.sarValidationMessages);
+                      }
+
+                      setLoading(false);
+
+                    })
+                    .catch(err => {
+          
+                        console.log('Upload Home:: processUploadFile call failed:', err);
+          
+                    }),
+
+
           setLoading(false);
 
+              // Uses ReactS3Client.  See: https://github.com/Developer-Amit/react-aws-s3
+          // console.log('Upload Home/uploadFile3:: about to upload file to S3 using ReactS3Client....');
 
           // const ReactS3Client = new S3(params);
           // ReactS3Client
