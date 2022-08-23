@@ -121,52 +121,52 @@ const Home = () => {
           //AWS Amplify Storage: (This puts the files in a bucket called sar-import-bucket145558-dev,
           //                in a "public/" folder...nope
 
-          // const result = await Storage.put(selectedFile.name, selectedFile, {
-          //   contentType: selectedFile.type,
-          // });
-          // console.log("AWS Amplify uploaded file ok? ", result);
-          // setLoading(false);
+          const result = await Storage.put(selectedFile.name, selectedFile, {
+            contentType: selectedFile.type,
+          });
+          console.log("AWS Amplify uploaded file ok? ", result);
+          setLoading(false);
 
 
-          const ReactS3Client = new S3(params);
-          ReactS3Client
-            .uploadFile(file, file.name)
-            .then(data => 
+          // const ReactS3Client = new S3(params);
+          // ReactS3Client
+          //   .uploadFile(file, file.name)
+          //   .then(data => 
                   
-                    console.log("Upload Home/uploadFile3:: returned data: ", data.location),
+          //           console.log("Upload Home/uploadFile3:: returned data: ", data.location),
               
-                    console.log('Upload Home/uploadFile3:: File uploaded to the S3 bucket; about to call SarProcessor lambda...'),
+          //           console.log('Upload Home/uploadFile3:: File uploaded to the S3 bucket; about to call SarProcessor lambda...'),
 
-                    // successful upload of file, run the lambda function to process it and get
-                    // the results of that process:
+          //           // successful upload of file, run the lambda function to process it and get
+          //           // the results of that process:
 
 
-                    axios.post("/api/processUploadFile/?filename=" + file.name, config)
-                    .then(response => {
+          //           axios.post("/api/processUploadFile/?filename=" + file.name, config)
+          //           .then(response => {
           
-                      console.log('Upload Home/uploadFile3:: calling processUploadFile returned...');
+          //             console.log('Upload Home/uploadFile3:: calling processUploadFile returned...');
 
-                      // check response:
-                      if (response.data.code != "200"){
-                        console.log('Upload Home/callLambda:: Error occurred in processUploadFile =>' + response.data.message);
-                        setErrMsg(response.data.message);
-                      }
-                      else{
-                        setResultsTableData(response.data.sarValidationMessages);
-                      }
+          //             // check response:
+          //             if (response.data.code != "200"){
+          //               console.log('Upload Home/callLambda:: Error occurred in processUploadFile =>' + response.data.message);
+          //               setErrMsg(response.data.message);
+          //             }
+          //             else{
+          //               setResultsTableData(response.data.sarValidationMessages);
+          //             }
 
-                      setLoading(false);
+          //             setLoading(false);
 
-                    })
-                    .catch(err => {
+          //           })
+          //           .catch(err => {
           
-                        console.log('Upload Home:: processUploadFile call failed:', err);
+          //               console.log('Upload Home:: processUploadFile call failed:', err);
           
-                    }),
+          //           }),
   
 
-                  )
-            .catch(err => console.error("Upload Home:: ReactS3Client returned error: ", err)) 
+          //         )
+          //   .catch(err => console.error("Upload Home:: ReactS3Client returned error: ", err)) 
 
 
         } catch (err) {
