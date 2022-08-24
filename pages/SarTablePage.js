@@ -12,6 +12,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory, { PaginationProvider } from 'react-bootstrap-table2-paginator';
 import filterFactory from 'react-bootstrap-table2-filter';
 import { textFilter } from 'react-bootstrap-table2-filter';
+import Spinner from '../components/UI/Spinner/Spinner';
 
 import axios from "axios";
 
@@ -179,34 +180,37 @@ function SarTablePage() {
         <Button onClick={() => router.back()}>Return</Button>
         <br/>
         <br/>
-        {loading > 0 &&
+        {/* {loading > 0 &&
             <div>
                 <ActivityIndicator size="large"/>
             </div>
+        } */}
+        {loading > 0 &&
+            <Spinner />
         }
-            <PaginationProvider pagination={paginationFactory(options)} >
-                {
-                    ({
-                        paginationTableProps
-                    }) => (
-                        <div>
+        <PaginationProvider pagination={paginationFactory(options)} >
+            {
+                ({
+                    paginationTableProps
+                }) => (
+                    <div>
 
-                            <BootstrapTable bootstrap4
-                                keyField="service_order_id"
-                                data={sarTableData}
-                                columns={columns}
-                                striped
-                                hover
-                                noDataIndication="0 Records Found"
-                                filter={filterFactory()}
-                                {...paginationTableProps}
-                            />
+                        <BootstrapTable bootstrap4
+                            keyField="service_order_id"
+                            data={sarTableData}
+                            columns={columns}
+                            striped
+                            hover
+                            noDataIndication="0 Records Found"
+                            filter={filterFactory()}
+                            {...paginationTableProps}
+                        />
 
 
-                        </div>
-                    )
-                }
-            </PaginationProvider>
+                    </div>
+                )
+            }
+        </PaginationProvider>
 
     
   </div>

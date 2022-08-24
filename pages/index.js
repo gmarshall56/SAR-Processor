@@ -8,6 +8,7 @@ import { s3Client } from "../lib/S3Client"
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { ActivityIndicator } from "react-native-web";
 import { Alert } from "reactstrap";
+import Spinner from '../components/UI/Spinner/Spinner';
 // import S3 from 'react-aws-s3';
 
 import Head from 'next/head'
@@ -32,6 +33,15 @@ const Home = () => {
   const [errmsg, setErrMsg] = useState(false);
 
 
+  const theDomain = window.location.href;
+  console.log("theDomain = "+ theDomain);
+  const showtestlambdabtn = theDomain.includes("localhost");
+
+
+
+  const current = new Date();
+  const currentDate = `${current.getMonth()+1}/${current.getDate()}/${current.getFullYear()}`;
+
   const handleFileInput = (e) => {
       setSelectedFile(e.target.files[0]);
   }
@@ -51,8 +61,6 @@ const Home = () => {
       },
     };
 
-    const theDomain = window.location.href;
-    console.log("theDomain = "+ theDomain);
     console.log("Upload Home/callLambda:: about to call processUploadFile with this URL: " + theDomain +
                 "api/processUploadFile/?filename=" + file);
 
@@ -93,8 +101,6 @@ const Home = () => {
     let awsex = {...awsExports};
     console.log('pp awsExports: ', awsex);
 
-    setLoading(true);
-
     const config = {
       headers:{
         'Content-Type': selectedFile.type
@@ -119,6 +125,8 @@ const Home = () => {
         // Create an object and upload it to the Amazon S3 bucket.
         try {
 
+          setLoading(true);
+
           //AWS Amplify Storage: (This puts the files in a bucket called sar-import-bucket145558-dev,
           //                in a "public/" folder...nope
 
@@ -127,7 +135,7 @@ const Home = () => {
           const result = await Storage.put(selectedFile.name, selectedFile, {
             contentType: selectedFile.type,
           });
-          
+
           console.log("Upload Home/uploadFile3:: AWS Amplify uploaded file ok? ", result);
           console.log('Upload Home/uploadFile3:: File uploaded to the S3 bucket; about to call SarProcessor lambda...'),
 
@@ -152,10 +160,10 @@ const Home = () => {
           
                         console.log('Upload Home:: processUploadFile call failed:', err);
           
-                    }),
+                    })
 
 
-          setLoading(false);
+          // setLoading(false);
 
               // Uses ReactS3Client.  See: https://github.com/Developer-Amit/react-aws-s3
           // console.log('Upload Home/uploadFile3:: about to upload file to S3 using ReactS3Client....');
@@ -341,11 +349,11 @@ const Home = () => {
             <h1 className={classes.title}>SAR Upload </h1>
             <br></br>
             <br></br>
-            {loading > 0 &&
-                    <div>
-                    <ActivityIndicator size="large"/>
+            {/* {loading > 0 &&
+                  <div>
+                  <ActivityIndicator size="large"/>
                 </div>
-            }
+            } */}
             <br></br>
             <br></br>
             <br></br>
@@ -358,7 +366,9 @@ const Home = () => {
                 <Button onClick={() => uploadFile3(selectedFile)} bsStyle="primary">Upload to S3</Button>
                 <br/>
                 <br/>
-                <Button onClick={() => callLambda('SAR_Report_10_Rows.xlsx')} bsStyle="primary">Test Lambda Function</Button>
+                {showtestlambdabtn &&
+                  <Button onClick={() => callLambda('SAR_Report_10_ROWS.xlsx')} bsStyle="primary">Test Lambda Function</Button>
+                }
               </div>
             </Form.Group>
 
@@ -376,24 +386,28 @@ const Home = () => {
             </Alert>
           </>
         }
-        
-        {resultsTableData.length > 0 &&
-          <h2 className={classes.messages}>You have {resultsTableData.length} validation messages</h2>
-        }
-      
-        <br/>
 
-        {resultsTableData.length > 0 &&
-          <Row style={{ marginLeft: '0px', marginRight: '0px' }}>
-              <Col>
-                  <ResultsTable inputTableData={resultsTableData}
-                  />
-              </Col>
-          </Row>
-        }
-        
 
-        <footer className={classes.footer}>Developed by Marshall IT... 06.28.2022</footer>
+        {loading === true ? (
+          <Spinner /> 
+        ) : (
+            <>
+            {resultsTableData.length > 0 &&
+              <>
+                <h2 className={classes.messages}>You have {resultsTableData.length} validation messages</h2>                
+                <br/>
+                <Row style={{ marginLeft: '0px', marginRight: '0px' }}>
+                    <Col>
+                        <ResultsTable inputTableData={resultsTableData}/>
+                    </Col>
+                </Row>
+              </>
+            }          
+            </>
+        )}
+
+        
+        <footer className={classes.footer}>Developed by Marshall IT.&nbsp;&nbsp;&nbsp;&nbsp;Build Date: {currentDate}</footer>
     </div>
 
   </div>
