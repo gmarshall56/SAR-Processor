@@ -150,3 +150,8 @@ Y.container {
   display: flex;
   justify-content: center;
 }
+
+.signoutDiv{
+  width: 6em;
+  margin: auto;
+}
